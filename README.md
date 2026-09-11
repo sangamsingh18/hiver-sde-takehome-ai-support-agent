@@ -36,7 +36,7 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configure API Key
-ResolveEngine uses Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via the modern `google-genai` SDK:
+SupportPilot uses Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via the modern `google-genai` SDK:
 ```powershell
 $env:GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
 ```
@@ -131,7 +131,7 @@ Full Raw AppleSupport Corpus (~106,321 pairs)
 
 ## 3. System Architecture & Core Pipeline
 
-ResolveEngine operates as a 4-stage pipeline combining structured LLM reasoning, sparse retrieval, and a dual-condition trust gate.
+SupportPilot operates as a 4-stage pipeline combining structured LLM reasoning, sparse retrieval, and a dual-condition trust gate.
 
 ```text
                       ┌─────────────────────────┐
@@ -223,16 +223,16 @@ The dataset was distilled into **14 mutually exclusive, support-centric categori
 
 ## 5. Evaluation Strategy & Baseline Comparisons
 
-We evaluated ResolveEngine against two baselines on the same hand-labelled evaluation splits to measure the exact value added by the retrieval-augmented LLM pipeline.
+We evaluated SupportPilot against two baselines on the same hand-labelled evaluation splits to measure the exact value added by the retrieval-augmented LLM pipeline.
 
 ### Baseline Definitions
 1. **Baseline 1 (Trivial Majority-Class):** Predicts the most frequent class (`DEVICE_PERFORMANCE_AND_STABILITY`) for all customer inquiries.
 2. **Baseline 2 (Supervised TF-IDF Linear Model):** A scikit-learn pipeline (TF-IDF vectorizer + Logistic Regression with class-weight balancing) trained on `development_set.csv` (100 examples) and evaluated on `golden_set.csv` (150 examples).
-3. **Production ResolveEngine:** Full pipeline with Gemini Flash Intent Classifier, TF-IDF Historical Retrieval, Grounded Response Generator, and Dual-Condition Trust Gate.
+3. **Production SupportPilot:** Full pipeline with Gemini Flash Intent Classifier, TF-IDF Historical Retrieval, Grounded Response Generator, and Dual-Condition Trust Gate.
 
 ### Benchmark Comparison Table
 
-| Metric | Baseline 1: Majority Class | Baseline 2: Supervised TF-IDF | ResolveEngine (Targeted Verification) |
+| Metric | Baseline 1: Majority Class | Baseline 2: Supervised TF-IDF | SupportPilot (Targeted Verification) |
 |---|---|---|---|
 | **Approach Type** | Constant Predictor | Supervised Classical ML | RAG + Dual-Gate LLM Agent |
 | **Intent Accuracy** | **28.80%** | **41.33%** | **100.0%** (5/5) |
@@ -244,13 +244,13 @@ We evaluated ResolveEngine against two baselines on the same hand-labelled evalu
 
 ### Key Takeaway from Baselines
 * **The TF-IDF model struggles (41.33% accuracy)** due to severe vocabulary overlap in customer tweets (e.g., *"phone is broken"*, *"can't connect"*, *"update killed it"*).
-* **ResolveEngine resolves semantic ambiguity** by understanding conversational context and synthesizing multi-step troubleshooting steps backed by historical data.
+* **SupportPilot resolves semantic ambiguity** by understanding conversational context and synthesizing multi-step troubleshooting steps backed by historical data.
 
 ---
 
 ## 6. Evaluation Harness & LLM-as-a-Judge Rubric
 
-ResolveEngine includes a reproducible automated evaluation harness (`evaluation/evaluate_agent.py` and `evaluation/verify_targeted_5.py`) with structured metrics and an LLM-as-a-judge rubric.
+SupportPilot includes a reproducible automated evaluation harness (`evaluation/evaluate_agent.py` and `evaluation/verify_targeted_5.py`) with structured metrics and an LLM-as-a-judge rubric.
 
 ### 1. Automated Metrics
 * **Classification:** Per-class Accuracy, Precision, Recall, and Macro F1.
@@ -355,7 +355,7 @@ Similarity Cutoff   Domain Confusion    Masking             Gap in Update      O
 
 ## 9. What I'd Do Next With One More Week
 
-If given another week to expand ResolveEngine, here is the day-by-day engineering roadmap:
+If given another week to expand SupportPilot, here is the day-by-day engineering roadmap:
 
 ```text
 Day 1: Multi-Annotator Golden Set Verification
@@ -384,7 +384,7 @@ Day 7: Production Containerization & Streamlit Demo UI
 
 ## 10. Engineering Decision Log
 
-Here are 15 non-obvious technical decisions made during the design and implementation of ResolveEngine:
+Here are 15 non-obvious technical decisions made during the design and implementation of SupportPilot:
 
 1. **Selected AppleSupport over Retail/Telco Brands:** Apple Support has structured technical troubleshooting workflows rather than simple order tracking lookups.
 2. **Reconstructed Conversation Threads via Parent Tweet IDs:** Extracted true customer-agent interaction pairs rather than treating isolated tweets as independent texts.
@@ -407,7 +407,7 @@ Here are 15 non-obvious technical decisions made during the design and implement
 ## 11. Repository Structure & Artifacts
 
 ```text
-ResolveEngine/
+SupportPilot/
 ├── baselines/
 │   ├── majority_baseline.py       # Trivial baseline (Majority class predictor)
 │   ├── tfidf_baseline.py          # Classical ML baseline (TF-IDF + Logistic Regression)
