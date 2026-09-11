@@ -1,4 +1,4 @@
-# ResolveEngine — AI Customer Support Agent for AppleSupport
+# SupportPilot — AI agent for intelligent customer support
 
 <p align="center">
   <strong>Evidence-Backed Autonomous Support & Human Escalation System</strong><br>
